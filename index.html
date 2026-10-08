@@ -1,24 +1,240 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>T1 SoloQ Live</title>
+<title>T1 SoloQ Live — unofficial fan channel</title>
+<meta name="description" content="T1 SoloQ Live is an automated, unofficial fan-made Twitch channel streaming the live ranked solo queue games of T1 and T1 Esports Academy players.">
+<link rel="icon" href="assets/logo.png">
 <style>
-  body { font-family: system-ui, sans-serif; background: #111; color: #eee; margin: 0; }
-  main { max-width: 640px; margin: 0 auto; padding: 48px 16px; }
-  img { width: 120px; height: 120px; border-radius: 12px; }
-  a { color: #e2012d; }
-  .note { color: #aaa; font-size: 0.9rem; }
+  :root {
+    --red: #e4002b;
+    --bg: #0b0b0d;
+    --panel: #141418;
+    --line: rgba(255, 255, 255, 0.09);
+    --text: #f2f2f4;
+    --muted: #a0a0ab;
+    --font: "Segoe UI", system-ui, -apple-system, Helvetica, Arial, sans-serif;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--font);
+    line-height: 1.65;
+    -webkit-font-smoothing: antialiased;
+  }
+  .wrap { max-width: 880px; margin: 0 auto; padding: 0 16px; }
+  a { color: #ff6b85; }
+
+  header {
+    padding: 72px 0 56px;
+    text-align: center;
+    background:
+      radial-gradient(circle at 50% 0%, rgba(228, 0, 43, 0.28) 0%, transparent 60%),
+      var(--bg);
+    border-bottom: 1px solid var(--line);
+  }
+  header img { width: 150px; height: auto; }
+  h1 { margin: 18px 0 8px; font-size: 2.4rem; letter-spacing: 0.02em; }
+  .tagline { margin: 0 auto 28px; max-width: 560px; color: var(--muted); font-size: 1.05rem; }
+  .cta {
+    display: inline-block;
+    padding: 13px 30px;
+    border-radius: 30px;
+    background: var(--red);
+    color: #fff;
+    font-weight: 700;
+    text-decoration: none;
+  }
+  .cta:hover { background: #ff1f47; }
+  .unofficial {
+    margin-top: 22px;
+    font-size: 0.82rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  section { padding: 44px 0; border-bottom: 1px solid var(--line); }
+  h2 { font-size: 1.35rem; margin: 0 0 14px; }
+  h3 { font-size: 1rem; margin: 22px 0 6px; }
+  p, li { color: #dcdce2; }
+  ul { padding-left: 20px; }
+  li { margin-bottom: 7px; }
+  .muted { color: var(--muted); font-size: 0.93rem; }
+
+  figure { margin: 0 0 26px; }
+  figure img {
+    width: 100%;
+    height: auto;
+    display: block;
+    border: 1px solid var(--line);
+    border-radius: 8px;
+  }
+  figcaption { margin-top: 9px; color: var(--muted); font-size: 0.9rem; }
+
+  .api { border-collapse: collapse; width: 100%; margin-top: 10px; }
+  .api th, .api td { text-align: left; padding: 9px 10px; border-bottom: 1px solid var(--line); vertical-align: top; }
+  .api th { color: var(--muted); font-weight: 600; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.05em; }
+  .api td:first-child { white-space: nowrap; font-weight: 600; }
+
+  .card { background: var(--panel); border: 1px solid var(--line); border-radius: 8px; padding: 18px 22px; }
+  footer { padding: 34px 0 60px; color: var(--muted); font-size: 0.88rem; }
+  footer p { color: var(--muted); }
+
+  @media (max-width: 600px) {
+    h1 { font-size: 1.8rem; }
+    header { padding: 52px 0 40px; }
+  }
 </style>
 </head>
 <body>
-<main>
-  <img src="t1soloq_logo.png" alt="T1 SoloQ Live logo">
-  <h1>T1 SoloQ Live</h1>
-  <p>An automated, unofficial fan-made Twitch channel that streams the live ranked solo queue games of T1 players, and of T1 Esports Academy when no T1 player is in game.</p>
-  <p>Channel: <a href="https://www.twitch.tv/t1soloq">twitch.tv/t1soloq</a> (opening soon)</p>
-  <p class="note">T1 SoloQ Live is not affiliated with, endorsed by or approved by Riot Games or T1. It uses the Riot Games API (Account-V1, Spectator-V5, League-V4, Match-V5).</p>
-</main>
+
+<header>
+  <div class="wrap">
+    <img src="assets/logo.png" alt="T1 SoloQ Live">
+    <h1>T1 SoloQ Live</h1>
+    <p class="tagline">
+      An automated, fan-made Twitch channel that spectates the live ranked solo queue games
+      of T1 players, and of T1 Esports Academy when no T1 player is in game.
+    </p>
+    <a class="cta" href="https://twitch.tv/t1soloq">Watch on Twitch</a>
+    <p class="unofficial">Unofficial fan project · Not affiliated with T1 or Riot Games</p>
+  </div>
+</header>
+
+<section>
+  <div class="wrap">
+    <h2>What it does</h2>
+    <p>
+      A single script watches a fixed list of pro accounts on the Korean server. As soon as one of
+      them starts a ranked solo queue game, the channel joins that game in spectator mode and
+      streams it, with the camera locked on the player being followed. When the game ends, the
+      channel returns to a waiting screen until the next one starts.
+    </p>
+    <ul>
+      <li><strong>Main roster first.</strong> T1 Esports Academy games are shown only when no T1 player is in game.</li>
+      <li><strong>Public information only.</strong> Rank, LP and champion, the same data the game shows every spectator.</li>
+      <li><strong>Other pros in the game</strong> are listed in a corner panel, with their team and champion.</li>
+      <li><strong>Spectator delay.</strong> Games appear about four minutes after they start, as Riot's spectator service imposes.</li>
+    </ul>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <h2>What it looks like</h2>
+    <figure>
+      <img src="assets/screen-live.jpg" alt="In-game view with the channel overlay">
+      <figcaption>
+        Live game. The left banner shows the player, champion and solo queue rank; the right panel
+        lists the other pros in the same game, as allies or opponents.
+      </figcaption>
+    </figure>
+    <figure>
+      <img src="assets/screen-idle.jpg" alt="Waiting screen between games">
+      <figcaption>
+        Waiting screen between games, with the current rank and LP of the five main roster players.
+        All on-screen text alternates between English and Korean.
+      </figcaption>
+    </figure>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <h2>How the Riot Games API is used</h2>
+    <p class="muted">
+      One server-side script, one API key, one operator. Requests are rate limited in the client
+      itself (20 per second, 100 per two minutes).
+    </p>
+    <table class="api">
+      <tr><th>Endpoint</th><th>Why</th></tr>
+      <tr>
+        <td>Account-V1</td>
+        <td>Resolves about thirteen fixed Riot IDs to PUUIDs, once, then caches them locally.</td>
+      </tr>
+      <tr>
+        <td>Spectator-V5</td>
+        <td>Every 60 seconds, checks whether those accounts are in a ranked solo game, to pick which game to spectate.</td>
+      </tr>
+      <tr>
+        <td>League-V4</td>
+        <td>Reads Solo/Duo tier and LP, shown on the waiting screen and in the in-game banner.</td>
+      </tr>
+      <tr>
+        <td>Match-V5</td>
+        <td>Lists recent ranked match IDs, only to warn the operator when a tracked account looks inactive or renamed.</td>
+      </tr>
+    </table>
+    <h3>What the project does not do</h3>
+    <ul>
+      <li>No win rates, tier lists, ranking service or any other derived statistics product.</li>
+      <li>No access to data the game does not already show to spectators.</li>
+      <li>No reading of game memory, and no replay file downloads.</li>
+      <li>No use of the Tournaments API.</li>
+    </ul>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <h2>Privacy</h2>
+    <div class="card">
+      <p>
+        <strong>This site collects nothing.</strong> It is a set of static pages. There are no accounts,
+        no cookies, no analytics, no advertising scripts and no tracking of any kind. Nothing you do
+        here is stored or shared.
+      </p>
+      <h3>The channel</h3>
+      <p>
+        The script that runs the channel stores only a local cache mapping the tracked Riot IDs to
+        their PUUIDs, on the operator's own machine. No personal data about viewers is collected,
+        and no data obtained from the Riot Games API is sold, published as a dataset, or exposed
+        through any API or website.
+      </p>
+      <h3>Watching on Twitch</h3>
+      <p>
+        The stream is hosted by Twitch, which applies
+        <a href="https://www.twitch.tv/p/legal/privacy-notice/">its own privacy notice</a> when you
+        watch. This project has no access to viewer data beyond the public statistics Twitch shows
+        every streamer.
+      </p>
+      <h3>Tracked players</h3>
+      <p>
+        Only public professional accounts are followed, and only information the game itself shows
+        to spectators is displayed. If a player wants their account removed from the channel, write
+        to the contact address below and it will be removed.
+      </p>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <h2>Contact</h2>
+    <p>
+      Questions, takedown requests or anything else:
+      <a href="mailto:kafaubinchassagne@gmail.com">kafaubinchassagne@gmail.com</a>.
+    </p>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <p>
+      T1 SoloQ Live is an unofficial fan project. It is not affiliated with, endorsed, sponsored or
+      specifically approved by T1 or by Riot Games, Inc.
+    </p>
+    <p>
+      T1 SoloQ Live isn't endorsed by Riot Games and doesn't reflect the views or opinions of Riot
+      Games or anyone officially involved in producing or managing Riot Games properties. Riot Games
+      and all associated properties are trademarks or registered trademarks of Riot Games, Inc.
+    </p>
+  </div>
+</footer>
+
 </body>
 </html>
